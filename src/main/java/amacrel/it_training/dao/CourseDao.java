@@ -31,7 +31,7 @@ public class CourseDao {
     }
 
     public void deleteCourse(Course course) {
-        if (course.getId() != 0) {
+        if (course.getCourse_id() != 0) {
             this.courseRepository.delete(course);
         }
     }
