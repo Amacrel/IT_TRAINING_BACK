@@ -17,22 +17,20 @@ public class CourseDao {
         return this.courseRepository.findAll();
     }
 
-    public Optional<Course> getCourse(int id) {
+    public Optional<Course> getCourseById(int id) {
         return this.courseRepository.findById(id);
     }
 
-    public String deleteCourseById(int id) {
-        if (id != 0) {
-            this.courseRepository.deleteById(id);
-            return "The course has been deleted successfully";
-        } else {
-            return "The id provided is invalid";
-        }
+    public void createCourse(Course course) {
+        this.courseRepository.save(course);
+    }
+
+    public void updateCourse(Course course) {
+        // TO-DO Check Attributes
+        this.courseRepository.save(course);
     }
 
     public void deleteCourse(Course course) {
-        if (course.getCourse_id() != 0) {
-            this.courseRepository.delete(course);
-        }
+        this.courseRepository.delete(course);
     }
 }
