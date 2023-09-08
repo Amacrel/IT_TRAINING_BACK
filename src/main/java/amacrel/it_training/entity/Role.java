@@ -1,4 +1,24 @@
 package amacrel.it_training.entity;
 
-public class Role {
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+import java.util.List;
+
+@Entity
+@Table(name = "Role")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Role implements Serializable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Id_Role")
+    private int role_id;
+    private int rights;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<_User> _user;
 }
