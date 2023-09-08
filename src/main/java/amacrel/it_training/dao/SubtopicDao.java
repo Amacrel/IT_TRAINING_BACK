@@ -21,16 +21,37 @@ public class SubtopicDao {
         return this.subtopicRepository.findById(id);
     }
 
-    public void createSubtopic(Subtopic subtopic) {
-        this.subtopicRepository.save(subtopic);
+    public String createSubtopic(Subtopic subtopic) {
+        try {
+            if (!subtopic.getSubtopic_name().equals("")) {
+                this.subtopicRepository.save(subtopic);
+                return "The subtopic " + subtopic + "has been created";
+            } else {
+                return "The Subtopic could not be created";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "The Subtopic could not be created";
+        }
     }
 
-    public void updateSubtocpic(Subtopic subtopic) {
+    public Subtopic updateSubtopic(Subtopic subtopic) {
         // TO-DO Check Attributes
-        this.subtopicRepository.save(subtopic);
+        return this.subtopicRepository.save(subtopic);
     }
 
-    public void deleteSubtopic(Subtopic subtopic) {
-        this.subtopicRepository.delete(subtopic);
+    public String deleteSubtopic(Subtopic subtopic) {
+        int id = subtopic.getSubtopic_id();
+        try {
+            if (id != 0) {
+                this.subtopicRepository.delete(subtopic);
+                return "The Subtopic with id: " + id + " has been deleted successfully";
+            } else {
+                return "The Subtopic could not be deleted because the id is not valid";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "The subtopic could not be deleted";
+        }
     }
 }
