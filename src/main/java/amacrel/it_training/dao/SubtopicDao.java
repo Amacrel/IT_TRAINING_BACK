@@ -25,7 +25,7 @@ public class SubtopicDao {
         try {
             if (!subtopic.getSubtopic_name().equals("")) {
                 this.subtopicRepository.save(subtopic);
-                return "The subtopic " + subtopic + "has been created";
+                return "The subtopic " + subtopic + " has been created";
             } else {
                 return "The Subtopic could not be created";
             }
