@@ -34,10 +34,16 @@ public class Session implements Serializable {
     @Column(name = "type")
     private String session_type;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="Id_Course", referencedColumnName = "Id_Course" )
+    @JoinTable(name = "Course",
+            joinColumns = { @JoinColumn(name = "Id_Course")},
+            inverseJoinColumns = { @JoinColumn(name = "Id_Session")}
+    )
     private Course course;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="Id_Evaluation", referencedColumnName = "Id_Evaluation")
+    @JoinTable(name = "Evaluation",
+            joinColumns = { @JoinColumn(name = "Id_Evalutation")},
+            inverseJoinColumns = { @JoinColumn(name = "Id_Session")}
+    )
     private List<Evaluation> evaluations = new ArrayList<Evaluation>();
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "Users",

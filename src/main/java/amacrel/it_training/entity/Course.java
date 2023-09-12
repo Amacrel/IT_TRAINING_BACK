@@ -26,9 +26,15 @@ public class Course implements Serializable {
     @Column(name="updatedAt")
     private Date updated_at;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="Id_Subtopic", referencedColumnName = "Id_Subtopic" )
+    @JoinTable(name = "Subtopic",
+            joinColumns = { @JoinColumn(name = "Id_Subtopic")},
+            inverseJoinColumns = { @JoinColumn(name = "Id_Course")}
+    )
     private Subtopic subtopic;
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="Id_Session", referencedColumnName = "Id_Session")
+    @JoinTable(name = "Session",
+            joinColumns = { @JoinColumn(name = "Id_Session")},
+            inverseJoinColumns = { @JoinColumn(name = "Id_Course")}
+    )
     private List<Session> sessions = new ArrayList<Session>();
 }
