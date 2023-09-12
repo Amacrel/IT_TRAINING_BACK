@@ -20,6 +20,9 @@ public class Subtopic implements Serializable {
     @Column(name = "name")
     private String subtopic_name;
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Id_Course")
+    @JoinTable(name = "Course",
+            joinColumns = { @JoinColumn(name = "Id_Course")},
+            inverseJoinColumns = { @JoinColumn(name = "Id_Evaluation")}
+    )
     private Course course;
 }

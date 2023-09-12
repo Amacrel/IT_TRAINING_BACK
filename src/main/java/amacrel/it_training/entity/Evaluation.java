@@ -28,7 +28,10 @@ public class Evaluation implements Serializable {
     @Column(name = "hasRequirements")
     private Boolean has_requirements;
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "Id_Session", referencedColumnName = "Id_Session")
+    @JoinTable(name = "Session",
+            joinColumns = { @JoinColumn(name = "Id_Session")},
+            inverseJoinColumns = { @JoinColumn(name = "Id_Evaluation")}
+    )
     private Session session;
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "Users",
