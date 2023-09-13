@@ -18,11 +18,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         _User user = gestionUserDao.findUserByUsername(username);
         if (user == null) throw new UsernameNotFoundException(String.format("User %s not found", username));
 
-        String role = String.valueOf(user.get_user_role());
-
+        String[] roles = user.getRoles().stream().map(u->u.getRights()).toArray(String[]::new);
         return User
-                .withUsername(user.get_user_firstname() + " " + user.get_user_lastname())
-                .password(String.valueOf(user.get_user_password()))
-                .roles(role).build();
+                .withUsername(user.get_user_email())
+                .password(user.get_user_password())
+                .roles(roles).build();
     }
 }

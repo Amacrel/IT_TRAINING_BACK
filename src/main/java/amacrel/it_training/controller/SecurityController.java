@@ -1,6 +1,7 @@
 package amacrel.it_training.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -10,6 +11,7 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,5 +58,20 @@ public class SecurityController {
 
         return Map.of("access-token", jwt);
     }
+
+//    @PostMapping("/signup")
+//    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
+//        // check if password and username not empty
+////        if ()
+//
+//        // check if username already exists in base
+//
+//
+//        // save in DB
+//
+//    }
+
+
+
 
 }
