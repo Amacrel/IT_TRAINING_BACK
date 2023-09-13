@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,26 +20,22 @@ public class Session implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Session")
     private int session_id;
-    @Column(name = "name")
+    @Column(name = "Name")
     private String session_name;
-    @Column(name = "price")
-    private String session_price;
-    @Column(name = "location")
+    @Column(name = "Price")
+    private double session_price;
+    @Column(name = "Location")
     private String session_location;
-    @Column(name = "slot")
-    private String session_slot;
-    @Column(name = "createdAt")
-    private String created_at;
-    @Column(name = "updatedAt")
-    private String updated_at;
-    @Column(name = "type")
+    @Column(name = "Slot")
+    private int session_slot;
+    @Column(name = "Created_At")
+    private Date created_at;
+    @Column(name = "Updated_At")
+    private Date updated_at;
+    @Column(name = "Type")
     private String session_type;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="Id_Course", referencedColumnName = "Id_Course" )
-    private Course course;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="Id_Evaluation", referencedColumnName = "Id_Evaluation")
-    private List<Evaluation> evaluations = new ArrayList<Evaluation>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Evaluation> evaluations;
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "Users",
             joinColumns = { @JoinColumn(name = "Id_Users")},

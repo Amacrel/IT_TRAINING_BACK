@@ -19,16 +19,14 @@ public class Course implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="Id_Course")
     private int course_id;
-    @Column(name="name")
+    @Column(name="Name")
     private String course_name;
-    @Column(name="createdAt")
+    @Column(name="Created_At")
     private Date created_at;
-    @Column(name="updatedAt")
+    @Column(name="Updated_At")
     private Date updated_at;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name="Id_Subtopic", referencedColumnName = "Id_Subtopic" )
-    private Subtopic subtopic;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name="Id_Session", referencedColumnName = "Id_Session")
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "courses")
+    private List<Subtopic> subtopics = new ArrayList<Subtopic>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Session> sessions = new ArrayList<Session>();
 }
