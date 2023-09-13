@@ -20,23 +20,17 @@ public class Evaluation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Evaluation")
     private int evaluation_id;
-    @Column(name = "createdAt")
+    @Column(name = "Created_At")
     private Date created_at;
-    @Column(name = "UpdatedAt")
+    @Column(name = "Updated_At")
     private Date updated_at;
     private int grade;
-    @Column(name = "hasRequirements")
+    @Column(name = "Has_Requirements")
     private Boolean has_requirements;
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "Session",
-            joinColumns = { @JoinColumn(name = "Id_Session")},
-            inverseJoinColumns = { @JoinColumn(name = "Id_Evaluation")}
-    )
-    private Session session;
     @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(name = "Users",
             joinColumns = { @JoinColumn(name = "Id_Users")},
             inverseJoinColumns = { @JoinColumn(name = "Id_Evaluation")}
     )
-    private List<_User> users = new ArrayList<_User>();
+    private List<_User> _users = new ArrayList<_User>();
 }
