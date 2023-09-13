@@ -22,7 +22,7 @@ public class Subtopic implements Serializable {
     @Column(name = "Name")
     private String subtopic_name;
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "courses",
+    @JoinTable(name = "Course",
             joinColumns = { @JoinColumn(name = "Id_Subtopic")},
             inverseJoinColumns = { @JoinColumn(name = "Id_Course")}
     )
