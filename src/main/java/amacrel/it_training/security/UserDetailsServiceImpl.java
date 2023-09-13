@@ -14,14 +14,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private _UserRepository gestionUserDao;
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        _User user = gestionUserDao.findUserByUsername(username);
-        if (user == null) throw new UsernameNotFoundException(String.format("User %s not found", username));
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        _User user = gestionUserDao.findUserByEmail(email);
+        if (user == null) throw new UsernameNotFoundException(String.format("User %s not found", email));
 
         String[] roles = user.getRoles().stream().map(u->u.getRights()).toArray(String[]::new);
         return User
-                .withUsername(user.get_user_email())
-                .password(user.get_user_password())
+                .withUsername(user.getEmail())
+                .password(user.getPassword())
                 .roles(roles).build();
     }
 }
