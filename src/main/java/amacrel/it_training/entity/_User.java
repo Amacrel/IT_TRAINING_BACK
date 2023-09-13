@@ -23,17 +23,20 @@ public class _User implements Serializable {
     @JoinColumn(name = "Id_Role")
     private Role _user_role;
     @Column(name = "firstname")
-    private int _user_firstname;
+    private String _user_firstname;
     @Column(name = "lastname")
-    private int _user_lastname;
+    private String _user_lastname;
     @Column(name = "email")
-    private int _user_email;
+    private String _user_email;
     @Column(name = "birthdate")
     private int _user_birthdate;
     @Column(name = "password")
-    private int _user_password;
+    private String _user_password;
     @Column(name = "status")
-    private int _user_status;
+    private String _user_status;
     @ManyToMany(cascade = CascadeType.ALL, mappedBy = "_users")
     private List<Session> sessions = new ArrayList<Session>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Role> roles;
+
 }

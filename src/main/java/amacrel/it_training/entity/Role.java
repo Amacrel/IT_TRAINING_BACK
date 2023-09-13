@@ -18,7 +18,5 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Role")
     private int role_id;
-    private int rights;
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<_User> _user;
+    private String rights;
 }
