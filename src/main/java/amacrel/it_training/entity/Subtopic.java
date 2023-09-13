@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "Subtopic")
@@ -17,12 +19,12 @@ public class Subtopic implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Subtopic")
     private int subtopic_id;
-    @Column(name = "name")
+    @Column(name = "Name")
     private String subtopic_name;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinTable(name = "Course",
-            joinColumns = { @JoinColumn(name = "Id_Course")},
-            inverseJoinColumns = { @JoinColumn(name = "Id_Evaluation")}
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "courses",
+            joinColumns = { @JoinColumn(name = "Id_Subtopic")},
+            inverseJoinColumns = { @JoinColumn(name = "Id_Course")}
     )
-    private Course course;
+    private List<Course> courses = new ArrayList<Course>();
 }

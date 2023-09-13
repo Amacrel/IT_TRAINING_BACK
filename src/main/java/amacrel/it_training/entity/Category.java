@@ -17,14 +17,11 @@ import java.util.List;
 public class Category implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Id_Category")
     private int category_id;
-    @Column(name = "name")
+    @Column(name = "Name")
     private String category_name;
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "Topic",
-            joinColumns = { @JoinColumn(name = "Id_Topic")},
-            inverseJoinColumns = { @JoinColumn(name = "Id_Category")}
-    )
-    private List<Topic> topics = new ArrayList<Topic>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Topic> topics;
 
 }

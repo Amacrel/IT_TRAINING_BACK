@@ -19,12 +19,8 @@ public class Topic implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Topic")
     private int topic_id;
-    @Column(name = "name")
+    @Column(name = "Name")
     private String topic_name;
-    @ManyToMany(cascade = { CascadeType.ALL })
-    @JoinTable(name = "Subtopic",
-            joinColumns = { @JoinColumn(name = "Id_Subtopic")},
-            inverseJoinColumns = { @JoinColumn(name = "Id_Topic")}
-    )
-    private List<Subtopic> subtopics = new ArrayList<Subtopic>();
+    @OneToMany(cascade = CascadeType.ALL, fetch= FetchType.EAGER)
+    private List<Subtopic> subtopics;
 }
