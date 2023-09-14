@@ -18,34 +18,30 @@ public class CategoryRestControler {
     @Autowired
     private CategoryDao categoryDao;
 
-    public CategoryRestControler(CategoryDao categoryDao) {
-        this.categoryDao = categoryDao;
-    }
-
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Category> getCategories() {
         return categoryDao.getCategories();
     }
 
-    @GetMapping("/{id}/")
+    @GetMapping("/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
         Optional<Category> category = categoryDao.getCategoryById(id);
         return category.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
+    @PostMapping("/")
     public Category createCategory(@RequestBody Category category) {
         return categoryDao.createCategory(category);
     }
 
-    @PutMapping("/update")
+    @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category updatedCategory) {
         Optional<Category> existingCategory = categoryDao.getCategoryById(id);
         return existingCategory.map(category -> ResponseEntity.ok(categoryDao.updateCategory(id, updatedCategory)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable int id) {
         Optional<Category> category = categoryDao.getCategoryById(id);
 

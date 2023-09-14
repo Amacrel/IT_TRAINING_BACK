@@ -3,6 +3,8 @@ package amacrel.it_training.controller;
 import amacrel.it_training.dao.CourseDao;
 import amacrel.it_training.entity.Course;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,35 +14,39 @@ import java.util.Optional;
 @RequestMapping(value = "/api/v1/courses")
 @Data
 public class CourseRestController {
-
+    @Autowired
     private CourseDao courseDao;
 
-    public CourseRestController(CourseDao courseDao) {
-        this.courseDao = courseDao;
-    }
-
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Course> getCourses() {
         return this.courseDao.getCourses();
     }
 
-    @GetMapping("/{id}/")
-    public Optional<Course> getCoursebyId(@PathVariable int id) {
-        return this.courseDao.getCourseById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Course> getCoursebyId(@PathVariable int id) {
+        Optional<Course> course = courseDao.getCourseById(id);
+        return course.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
-    public void createCourse(@RequestBody Course course) {
-        this.courseDao.createCourse(course);
+    @PostMapping("/")
+    public Course createCourse(@RequestBody Course course) {
+        return courseDao.createCourse(course);
     }
 
-    @PutMapping("/update")
-    public void updateCourse(@RequestBody Course course) {
-        this.courseDao.updateCourse(course);
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateCourse(@PathVariable int id, @RequestBody Course updatedCourse) {
+        Optional<Course> existingCourse = courseDao.getCourseById(id);
+        return existingCourse.map(course -> ResponseEntity.ok(courseDao.updateCourse(id, updatedCourse))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete")
-    public void deleteCourse(@RequestBody Course course) {
-        this.courseDao.deleteCourse(course);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteCourse(@PathVariable int id) {
+        Optional<Course> course = courseDao.getCourseById(id);
+        if (course.isPresent()) {
+            courseDao.deleteCourse(course.get());
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
