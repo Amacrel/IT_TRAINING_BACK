@@ -5,6 +5,7 @@ import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -34,9 +35,42 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http.sessionManagement(sa->sa.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .csrf(csrf->csrf.disable())
-            .authorizeHttpRequests(ar->ar.requestMatchers("api/v1/auth/login/**").permitAll())
-            .authorizeHttpRequests(ar->ar.requestMatchers("api/v1/auth/register/**").permitAll())
-            .authorizeHttpRequests(ar->ar.anyRequest().authenticated())
+            .authorizeHttpRequests(ar-> {
+                ar.requestMatchers("api/v1/auth/login/**")
+                        .permitAll();
+                ar.requestMatchers("api/v1/auth/register/**")
+                        .permitAll();
+                ar.requestMatchers("api/v1/**").hasAnyAuthority(("SCOPE_ROLE_ADMIN"));
+                ar.requestMatchers(HttpMethod.POST,"api/v1/topics/**")
+                        .hasAnyAuthority("SCOPE_ROLE_ADMIN", "SCOPE_ROLE_TRAINER");
+                ar.requestMatchers(HttpMethod.PUT,"api/v1/topics/**")
+                        .hasAnyAuthority("SCOPE_ROLE_ADMIN", "SCOPE_ROLE_TRAINER");
+                ar.requestMatchers(HttpMethod.DELETE,"api/v1/topics/**")
+                        .hasAnyAuthority("SCOPE_ROLE_ADMIN", "SCOPE_ROLE_TRAINER");
+                ar.requestMatchers(HttpMethod.GET,"api/v1/topics/**")
+                        .permitAll();
+                ar.requestMatchers(HttpMethod.POST,"api/v1/subtopics/**")
+                        .hasAnyAuthority("SCOPE_ROLE_ADMIN", "SCOPE_ROLE_TRAINER");
+                ar.requestMatchers(HttpMethod.PUT,"api/v1/subtopics/**")
+                        .hasAnyAuthority("SCOPE_ROLE_ADMIN", "SCOPE_ROLE_TRAINER");
+                ar.requestMatchers(HttpMethod.DELETE,"api/v1/subtopics/**")
+                        .hasAnyAuthority("SCOPE_ROLE_ADMIN", "SCOPE_ROLE_TRAINER");
+                ar.requestMatchers(HttpMethod.GET,"api/v1/subtopics/**")
+                        .permitAll();
+                ar.requestMatchers(HttpMethod.GET,"api/v1/categories/**")
+                        .permitAll();
+                ar.requestMatchers(HttpMethod.GET,"api/v1/users/**")
+                        .permitAll();
+                ar.requestMatchers(HttpMethod.GET,"api/v1/evaluations/**")
+                        .permitAll();
+                ar.requestMatchers(HttpMethod.GET,"api/v1/courses/**")
+                        .permitAll();
+                ar.requestMatchers(HttpMethod.GET,"api/v1/sessions/**")
+                        .permitAll();
+                ar.requestMatchers(HttpMethod.GET,"api/v1/roles/**")
+                        .permitAll();
+                ar.anyRequest().authenticated();
+            })
             .oauth2ResourceServer(oa->oa.jwt(Customizer.withDefaults()))
             .userDetailsService(userDetailsService)
             .build();
