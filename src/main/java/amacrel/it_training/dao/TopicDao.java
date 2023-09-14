@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -21,13 +22,22 @@ public class TopicDao {
         return this.topicRepository.findById(id);
     }
 
-    public void createTopic(Topic topic) {
-        this.topicRepository.save(topic);
+    public Topic createTopic(Topic topic) {
+        return this.topicRepository.save(topic);
     }
 
-    public void updateTopic(Topic topic) {
-        // TO-DO Check Attributes
-        this.topicRepository.save(topic);
+    public Topic updateTopic(int id, Topic topic) {
+        Topic existingTopic = this.getTopicById(id).get();
+        if (this.getTopicById(id).isPresent()) {
+            if (topic.getSubtopics() != null && !Objects.equals(topic.getSubtopics(), existingTopic.getSubtopics())) {
+                existingTopic.setSubtopics(topic.getSubtopics());
+            }
+            if (!topic.getTopic_name().equals("") && !Objects.equals(topic.getTopic_name(), existingTopic.getTopic_name())) {
+                existingTopic.setTopic_name(topic.getTopic_name());
+            }
+        }
+        return this.topicRepository.save(existingTopic);
+
     }
 
     public void deleteTopic(Topic topic) {
