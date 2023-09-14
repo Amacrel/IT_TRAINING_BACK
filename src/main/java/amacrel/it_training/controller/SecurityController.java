@@ -1,6 +1,10 @@
 package amacrel.it_training.controller;
 
+import amacrel.it_training.dao._UserDao;
+import amacrel.it_training.entity._User;
+import amacrel.it_training.repository._UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -21,12 +25,14 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("api/v1/auth")
 public class SecurityController {
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
     private JwtEncoder jwtEncoder;
+    @Autowired
+    private _UserDao userDao;
 
     @PostMapping("/login")
     public Map<String, String> login(String username, String password) {
@@ -43,7 +49,7 @@ public class SecurityController {
 
         JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
                 .issuedAt(instant)
-                .expiresAt(instant.plus(10, ChronoUnit.MINUTES))
+                .expiresAt(instant.plus(30, ChronoUnit.MINUTES))
                 .subject(username)
                 .claim("scope", scope)
                 .build();
@@ -59,19 +65,23 @@ public class SecurityController {
         return Map.of("access-token", jwt);
     }
 
-//    @PostMapping("/signup")
-//    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signupRequest) {
-//        // check if password and username not empty
-////        if ()
-//
-//        // check if username already exists in base
-//
-//
-//        // save in DB
-//
-//    }
-
-
-
-
+    @PostMapping("/register")
+    public ResponseEntity<?> registerUser(@RequestBody _User newUser) {
+        try {
+            _User user = userDao.findUserByEmail(newUser.getEmail());
+            // check if username/email already exists in base
+            if (user != null) {
+                return ResponseEntity.badRequest().body("Email address already used");
+            } else if (newUser.getPassword() == null && newUser.getEmail() == null) {
+                // checked if password and email are not empty
+                return ResponseEntity.badRequest().body("Password is needed to register");
+            }
+            // save in DB
+            userDao.createUser(newUser);
+            return ResponseEntity.ok("User has been created successfully");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("An error has occurred while trying to register");
+        }
+    }
 }

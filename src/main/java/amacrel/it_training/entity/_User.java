@@ -15,10 +15,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "Users")
-@Data
+//@Data
 //@AllArgsConstructor
 //@NoArgsConstructor
-@JsonIdentityInfo(generator= ObjectIdGenerators.IntSequenceGenerator.class)
 public class _User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +33,11 @@ public class _User implements Serializable {
     private Date birthdate;
     @Column(name = "Password")
     private String password;
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "_users")
+    @ManyToMany(mappedBy = "_users")
     private List<Session> sessions = new ArrayList<Session>();
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Role> roles = new ArrayList<Role>();
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "_users")
+    @ManyToMany(mappedBy = "_users")
     private List<Evaluation> evaluations = new ArrayList<Evaluation>();
 
     public String getEmail() {
@@ -87,6 +86,7 @@ public class _User implements Serializable {
     public void setLastname(String lastname) {
         this.lastname = lastname;
     }
+    @JsonIgnore
     public List<Evaluation> getEvaluations() {
         return evaluations;
     }
@@ -103,6 +103,7 @@ public class _User implements Serializable {
         this.roles = roles;
     }
 
+    @JsonIgnore
     public List<Session> getSessions() {
         return sessions;
     }

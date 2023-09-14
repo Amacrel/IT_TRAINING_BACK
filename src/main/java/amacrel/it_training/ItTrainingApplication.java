@@ -16,8 +16,6 @@ public class ItTrainingApplication implements CommandLineRunner {
 	}
 
 	public void run(String[] args) throws Exception {
-		System.out.println(_userRepository.findUserByEmail("test@test.com"));
-
 	}
 
 }
