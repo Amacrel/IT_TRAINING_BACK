@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -21,13 +22,22 @@ public class CategoryDao {
         return this.categoryRepository.findById(id);
     }
 
-    public void createCategory(Category category) {
-        this.categoryRepository.save(category);
+    public Category createCategory(Category category) {
+        return this.categoryRepository.save(category);
     }
 
-    public void updateCategory(Category category) {
-        // TO-DO Check Attributes
-        this.categoryRepository.save(category);
+    public Category updateCategory(int id, Category category) {
+        Category existingCategory = this.getCategoryById(id).get();
+        if (this.getCategoryById(id).isPresent()) {
+            if (category.getTopics() != null && !Objects.equals(category.getTopics(), existingCategory.getTopics())) {
+                existingCategory.setTopics(category.getTopics());
+            }
+            if (!category.getCategory_name().isEmpty() && !Objects.equals(category.getCategory_name(),
+                    existingCategory.getCategory_name())) {
+                existingCategory.setCategory_name(category.getCategory_name());
+            }
+        }
+        return this.categoryRepository.save(existingCategory);
     }
 
     public void deleteCategory(Category category) {

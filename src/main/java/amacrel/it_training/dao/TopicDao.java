@@ -32,7 +32,7 @@ public class TopicDao {
             if (topic.getSubtopics() != null && !Objects.equals(topic.getSubtopics(), existingTopic.getSubtopics())) {
                 existingTopic.setSubtopics(topic.getSubtopics());
             }
-            if (!topic.getTopic_name().equals("") && !Objects.equals(topic.getTopic_name(), existingTopic.getTopic_name())) {
+            if (!topic.getTopic_name().isEmpty() && !Objects.equals(topic.getTopic_name(), existingTopic.getTopic_name())) {
                 existingTopic.setTopic_name(topic.getTopic_name());
             }
         }

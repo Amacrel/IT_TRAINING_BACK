@@ -3,6 +3,8 @@ package amacrel.it_training.controller;
 import amacrel.it_training.dao.CategoryDao;
 import amacrel.it_training.entity.Category;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.Optional;
 @Data
 public class CategoryRestControler {
 
+    @Autowired
     private CategoryDao categoryDao;
 
     public CategoryRestControler(CategoryDao categoryDao) {
@@ -21,26 +24,36 @@ public class CategoryRestControler {
 
     @GetMapping("/all")
     public List<Category> getCategories() {
-        return this.categoryDao.getCategories();
+        return categoryDao.getCategories();
     }
 
     @GetMapping("/{id}/")
-    public Optional<Category> getCategoryById(@PathVariable int id) {
-        return this.categoryDao.getCategoryById(id);
+    public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
+        Optional<Category> category = categoryDao.getCategoryById(id);
+        return category.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping("/create")
-    public void createCategory(@RequestBody Category category) {
-        this.categoryDao.createCategory(category);
+    public Category createCategory(@RequestBody Category category) {
+        return categoryDao.createCategory(category);
     }
 
     @PutMapping("/update")
-    public void updateCategory(@RequestBody Category category) {
-        this.categoryDao.updateCategory(category);
+    public ResponseEntity<Category> updateCategory(@PathVariable int id, @RequestBody Category updatedCategory) {
+        Optional<Category> existingCategory = categoryDao.getCategoryById(id);
+        return existingCategory.map(category -> ResponseEntity.ok(categoryDao.updateCategory(id, updatedCategory)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/delete")
-    public void deleteCategory(@RequestBody Category category) {
-        this.categoryDao.deleteCategory(category);
+    public ResponseEntity<?> deleteCategory(@PathVariable int id) {
+        Optional<Category> category = categoryDao.getCategoryById(id);
+
+        if (category.isPresent()) {
+            categoryDao.deleteCategory(category.get());
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

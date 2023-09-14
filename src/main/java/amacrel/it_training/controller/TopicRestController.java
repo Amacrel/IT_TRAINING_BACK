@@ -2,7 +2,6 @@ package amacrel.it_training.controller;
 
 import amacrel.it_training.dao.TopicDao;
 import amacrel.it_training.entity.Topic;
-import amacrel.it_training.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

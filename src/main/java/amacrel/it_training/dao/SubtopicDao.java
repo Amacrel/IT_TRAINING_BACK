@@ -25,7 +25,7 @@ public class SubtopicDao {
         this.subtopicRepository.save(subtopic);
     }
 
-    public void updateSubtocpic(Subtopic subtopic) {
+    public void updateSubtopic(Subtopic subtopic) {
         // TO-DO Check Attributes
         this.subtopicRepository.save(subtopic);
     }
