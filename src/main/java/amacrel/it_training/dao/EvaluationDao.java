@@ -33,7 +33,8 @@ public class EvaluationDao {
                     existingEvaluation.get_users())) {
                 existingEvaluation.set_users(evaluation.get_users());
             }
-            if(evaluation.getName() != null && !Objects.equals(evaluation.getName(), existingEvaluation.getName())) {
+            if(!evaluation.getName().isEmpty() && !evaluation.getName().isBlank() && !Objects.equals(evaluation.getName(),
+                    existingEvaluation.getName())) {
                 existingEvaluation.setName(evaluation.getName());
             }
             if(evaluation.getGrade() != 0 && !Objects.equals(evaluation.getGrade(),

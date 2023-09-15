@@ -2,7 +2,10 @@ package amacrel.it_training.controller;
 
 import amacrel.it_training.dao.SubtopicDao;
 import amacrel.it_training.entity.Subtopic;
+import amacrel.it_training.entity.Topic;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,37 +15,41 @@ import java.util.Optional;
 @RequestMapping("/api/v1/subtopics")
 @Data
 public class SubtopicRestController {
-
+    @Autowired
     private SubtopicDao subtopicDao;
 
-    public SubtopicRestController(SubtopicDao subtopicDao) {
-        this.subtopicDao = subtopicDao;
-    }
-
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Subtopic> getSubtopics() {
-        return this.subtopicDao.getSubtopics();
+        return subtopicDao.getSubtopics();
     }
 
-    @GetMapping("/{id}/")
-    public Optional<Subtopic> getSubtopicById(@PathVariable int id) {
-        return this.subtopicDao.getSubtopicById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Subtopic> getSubtopicById(@PathVariable int id) {
+        Optional<Subtopic> subtopic = subtopicDao.getSubtopicById(id);
+        return subtopic.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
-    public void createSubtopic(@RequestBody Subtopic subtopic) {
-        this.subtopicDao.createSubtopic(subtopic);
+    @PostMapping("/")
+    public Subtopic createSubtopic(@RequestBody Subtopic subtopic) {
+        return subtopicDao.createSubtopic(subtopic);
     }
 
-    @PutMapping("/update")
-    public void updateSubtopic(@RequestBody Subtopic subtopic) {
-        this.subtopicDao.updateSubtopic(subtopic);
+    @PutMapping("/{id}")
+    public ResponseEntity<Subtopic> updateSubtopic(@PathVariable int id, @RequestBody Subtopic updatedSubtopic) {
+        Optional<Subtopic> existingSubtopic = subtopicDao.getSubtopicById(id);
+        return existingSubtopic.map(subtopic -> ResponseEntity.ok(subtopicDao.updateSubtopic(id, updatedSubtopic))). orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteSubtopic(@PathVariable int id) {
+        Optional<Subtopic> subtopic = subtopicDao.getSubtopicById(id);
 
-    @DeleteMapping("/delete")
-    public void deleteSubtopic(@RequestBody Subtopic subtopic) {
-        this.subtopicDao.deleteSubtopic(subtopic);
+        if (subtopic.isPresent()) {
+            subtopicDao.deleteSubtopic(subtopic.get());
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

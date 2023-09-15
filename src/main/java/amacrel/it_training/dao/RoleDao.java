@@ -29,7 +29,8 @@ public class RoleDao {
     public Role updateRole(int id, Role role) {
         Role existingRole = this.getRoleById(id).get();
         if (this.getRoleById(id).isPresent()) {
-            if (role.getRights() != null && !Objects.equals(role.getRights(), existingRole.getRights())) {
+            if (!role.getRights().isEmpty() && !role.getRights().isBlank() && !Objects.equals(role.getRights(),
+                    existingRole.getRights())) {
                 existingRole.setRights(role.getRights());
             }
         }

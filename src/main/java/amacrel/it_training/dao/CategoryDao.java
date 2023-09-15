@@ -32,7 +32,7 @@ public class CategoryDao {
             if (category.getTopics() != null && !Objects.equals(category.getTopics(), existingCategory.getTopics())) {
                 existingCategory.setTopics(category.getTopics());
             }
-            if (!category.getCategory_name().isEmpty() && !Objects.equals(category.getCategory_name(),
+            if (!category.getCategory_name().isEmpty() && !category.getCategory_name().isBlank() && !Objects.equals(category.getCategory_name(),
                     existingCategory.getCategory_name())) {
                 existingCategory.setCategory_name(category.getCategory_name());
             }
