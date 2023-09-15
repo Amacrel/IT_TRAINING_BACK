@@ -27,6 +27,7 @@ public class Evaluation implements Serializable {
     private Date created_at;
     @Column(name = "Updated_At")
     private Date updated_at;
+    @Column(name = "Grade")
     private int grade;
     @Column(name = "Has_Requirements")
     private Boolean has_requirements;
