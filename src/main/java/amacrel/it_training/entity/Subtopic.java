@@ -11,9 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "Subtopic")
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+//@Data
+//@AllArgsConstructor
+//@NoArgsConstructor
 public class Subtopic implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,4 +27,28 @@ public class Subtopic implements Serializable {
             inverseJoinColumns = { @JoinColumn(name = "Id_Course")}
     )
     private List<Course> courses = new ArrayList<Course>();
+
+    public int getSubtopic_id() {
+        return subtopic_id;
+    }
+
+    public void setSubtopic_id(int subtopic_id) {
+        this.subtopic_id = subtopic_id;
+    }
+
+    public String getSubtopic_name() {
+        return subtopic_name;
+    }
+
+    public void setSubtopic_name(String subtopic_name) {
+        this.subtopic_name = subtopic_name;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
 }
