@@ -3,6 +3,8 @@ package amacrel.it_training.controller;
 import amacrel.it_training.dao.RoleDao;
 import amacrel.it_training.entity.Role;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,36 +15,44 @@ import java.util.Optional;
 @Data
 public class RoleRestController {
 
+    @Autowired
     private RoleDao roleDao;
 
-    public RoleRestController(RoleDao roleDao) {
-        this.roleDao = roleDao;
-    }
 
-    @GetMapping("/all")
+    @GetMapping("/")
     public List<Role> getRoles() {
         return this.roleDao.getRoles();
     }
 
-    @GetMapping("/{id}/")
-    public Optional<Role> getRoleById(@PathVariable int id) {
-        return this.roleDao.getRoleById(id);
+    @GetMapping("/{id}")
+    public ResponseEntity<Role> getRoleById(@PathVariable int id) {
+        Optional<Role> role = roleDao.getRoleById(id);
+        return role.map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/create")
-    public void createRole(@RequestBody Role role) {
-        this.roleDao.createRole(role);
+    @PostMapping("/")
+    public Role createRole(@RequestBody Role role) {
+        return roleDao.createRole(role);
     }
 
-    @PutMapping("/update")
-    public void updateRole(@RequestBody Role role) {
-        this.roleDao.updateRole(role);
+    @PutMapping("/{id}")
+    public ResponseEntity<Role> updateRole(@PathVariable int id, @RequestBody Role updatedRole) {
+        Optional<Role> existingRole = roleDao.getRoleById(id);
+        return existingRole.map(role -> ResponseEntity.ok(roleDao.updateRole(id, updatedRole)))
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/delete")
-    public void deleteRole(@RequestBody Role role) {
-        this.roleDao.deleteRole(role);
-    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteRole(@PathVariable int id) {
+        Optional<Role> role = roleDao.getRoleById(id);
 
+        if (role.isPresent()) {
+            roleDao.deleteRole(role.get());
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 }

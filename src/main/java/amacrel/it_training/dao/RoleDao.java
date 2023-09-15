@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -21,13 +22,18 @@ public class RoleDao {
         return this.roleRepository.findById(id);
     }
 
-    public void createRole(Role role) {
-        this.roleRepository.save(role);
+    public Role createRole(Role role) {
+        return this.roleRepository.save(role);
     }
 
-    public void updateRole(Role role) {
-        // TO-DO Check Attributes
-        this.roleRepository.save(role);
+    public Role updateRole(int id, Role role) {
+        Role existingRole = this.getRoleById(id).get();
+        if (this.getRoleById(id).isPresent()) {
+            if (role.getRights() != null && !Objects.equals(role.getRights(), existingRole.getRights())) {
+                existingRole.setRights(role.getRights());
+            }
+        }
+        return this.roleRepository.save(existingRole);
     }
 
     public void deleteRole(Role role) {
