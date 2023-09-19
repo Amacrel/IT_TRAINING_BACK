@@ -25,25 +25,25 @@ public class _UserDao {
         return this.userRepository.findById(id);
     }
 
-    public void createUser(_User newUser) {
+    public _User createUser(_User newUser) {
         String password = passwordEncoder.encode(newUser.getPassword());
         newUser.setPassword(password);
-        this.userRepository.save(newUser);
+        return this.userRepository.save(newUser);
     }
 
-    public void updateUser(_User user) {
+    public _User updateUser(_User user) {
         if (this.getUserById(user.getId()).isPresent()) {
             _User existingUser = this.getUserById(user.getId()).get();
-            if (!user.getPassword().equals("") && !Objects.equals(user.getPassword(), existingUser.getPassword())) {
+            if (!user.getPassword().isEmpty() && !Objects.equals(user.getPassword(), existingUser.getPassword())) {
                 existingUser.setPassword(user.getPassword());
             }
-            if (!user.getEmail().equals("") && !Objects.equals(user.getEmail(), existingUser.getEmail())) {
+            if (!user.getEmail().isEmpty() && !Objects.equals(user.getEmail(), existingUser.getEmail())) {
                 existingUser.setEmail(user.getEmail());
             }
-            if (!user.getFirstname().equals("") && !Objects.equals(user.getFirstname(), existingUser.getFirstname())) {
+            if (!user.getFirstname().isEmpty() && !Objects.equals(user.getFirstname(), existingUser.getFirstname())) {
                 existingUser.setFirstname(user.getFirstname());
             }
-            if (!user.getLastname().equals("") && !Objects.equals(user.getLastname(), existingUser.getLastname())) {
+            if (!user.getLastname().isEmpty() && !Objects.equals(user.getLastname(), existingUser.getLastname())) {
                 existingUser.setLastname(user.getLastname());
             }
             if (user.getBirthdate() != null && !Objects.equals(user.getBirthdate(), existingUser.getBirthdate())) {
@@ -59,9 +59,9 @@ public class _UserDao {
                 existingUser.setSessions(user.getSessions());
             }
 
-            this.userRepository.save(existingUser);
+           return this.userRepository.save(existingUser);
         } else {
-            this.userRepository.save(user);
+            return this.userRepository.save(user);
         }
 
     }

@@ -23,10 +23,13 @@ public class Evaluation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Evaluation")
     private int evaluation_id;
+    @Column(name = "Name")
+    private String name;
     @Column(name = "Created_At")
     private Date created_at;
     @Column(name = "Updated_At")
     private Date updated_at;
+    @Column(name = "Grade")
     private int grade;
     @Column(name = "Has_Requirements")
     private Boolean has_requirements;
@@ -39,6 +42,10 @@ public class Evaluation implements Serializable {
 
     public int getEvaluation_id() {
         return evaluation_id;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Boolean getHas_requirements() {
@@ -63,6 +70,10 @@ public class Evaluation implements Serializable {
 
     public void setEvaluation_id(int evaluation_id) {
         this.evaluation_id = evaluation_id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setHas_requirements(Boolean has_requirements) {
